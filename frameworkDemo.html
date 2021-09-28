@@ -14,22 +14,46 @@
 <body></body>
 <script>
 
-    
+    // question
     const choice = {
         type: "html-button-response", 
         stimulus: "<p>Wähle weise:</p>",
-        choices: ["red pill", "blue pill"]
+        choices: ["red pill", "blue pill"],
+        data: {test_part: "question"}
     }
 
+    // the answer
+    const answer = {
+        type: "html-keyboard-response",
+        stimulus: () => {
+            if (jsPsych.data.get().filter({test_part: "question"}).last().values()[0]?.button_pressed == 1) { // blue pill
+                return "<p>Unwissen ist auch ein Segen...</p>"
+            } else {
+                return "<p>Willkommen in Zion, Neo!</p>"
+            }
+        },
+        trial_duration: 3000,
+        choices: jsPsych.NO_KEYS,
+
+    }
+
+    // keep him inside
     const matrixLoop = {
-        timeline: [choice],
+        timeline: [choice, answer],
         loop_function: () => {
-            return jsPsych.data.get().last().values()[0]?.button_pressed == 1 // blue pill
+            return jsPsych.data.get().filter({test_part: "question"}).last().values()[0]?.button_pressed == 1 // blue pill
         }    
     }
 
+    // start the matrix
     jsPsych.init({
-        timeline: [matrixLoop]
+        timeline: [matrixLoop, {
+            type: "html-keyboard-response",
+            stimulus: "Ende der <i>Simulation</i>",
+            on_start: () => {
+                setTimeout(() => {alert("oder doch nicht?")}, 5000)
+            }
+        }]
     })
 
 
