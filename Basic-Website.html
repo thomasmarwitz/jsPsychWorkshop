@@ -5,12 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erste Website</title>
-    <!--Verknüpfe ein CSS Stylesheet mit der HTML Datei-->
     <link href="style.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 
-    <div id="wow">Hello, world!</div>
+    <button id="tollerKnopf">Klick mich</button>
     
 </body>
+<script>
+    // Javacript Code kann hier rein geschrieben werden
+    // beachte, dass Kommentare hier mit zwei Backslashes beginnen
+
+    /*
+    Dies ist ein mehrzeiliger Kommentar
+    */
+
+    function verrückteFunktion() {
+        alert("Hello, world!")
+    }
+
+    const btn = document.getElementById("tollerKnopf")
+    btn.onclick = verrückteFunktion
+
+
+</script>
 </html>
