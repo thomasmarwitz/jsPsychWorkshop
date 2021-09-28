@@ -1,0 +1,21 @@
+html, body { height: 100%; } /* let body fill the whole screen */ 
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    margin: 0px;
+}
+
+div {
+    color: green;
+    border: 1px solid red;
+}
+
+/*
+#wow {
+    color: blue;
+}
+*/
+
