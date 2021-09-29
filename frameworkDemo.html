@@ -15,11 +15,13 @@
 <body></body>
 <script>
 
+    const fontColor = "red"
+
     // Gliederung in Trials
     const helloWorldTrial = {
         type: "html-keyboard-response", // hier nicht verschreiben!
         // Parameter? => Dokumentation
-        stimulus: "Hello, world!",
+        stimulus: `<div style='color: ${fontColor};'>Hello, world!</div>`,
         choices: ["space"], // nur damit kommt man weiter
     }
 
