@@ -33,7 +33,7 @@
     }
 
     function getAnswer() {
-        const btnChoicesIndex = getLastTrialValues().button_pressed // 0 oder 1
+        const btnChoicesIndex = getLastTrialValues().button_pressed// 0 oder 1
         return btnChoices[btnChoicesIndex]
     }
 
@@ -60,15 +60,20 @@
         }    
     }
 
+    const trialEnd = {
+        type: "html-keyboard-response",
+        stimulus: "Ende der <i>Simulation</i>",
+        on_start: () => {
+            setTimeout(
+                () => {alert("oder doch nicht?")}, 5000
+            )
+        }
+    }
+
+
     // start the matrix
     jsPsych.init({
-        timeline: [matrixLoop, {
-            type: "html-keyboard-response",
-            stimulus: "Ende der <i>Simulation</i>",
-            on_start: () => {
-                setTimeout(() => {alert("oder doch nicht?")}, 5000)
-            }
-        }]
+        timeline: [matrixLoop, trialEnd]
     })
 
 
