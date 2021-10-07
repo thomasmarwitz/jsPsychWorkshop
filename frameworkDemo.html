@@ -13,35 +13,113 @@
     <script src="jspsych-6.2.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.2.0/plugins/jspsych-fullscreen.js"></script>
     <script src="jspsych-6.2.0/plugins/jspsych-html-button-response.js"></script>
+    <!--custom helper js-->
+    <script src="csv-formatter.js"></script>
 </head>
 <body></body>
 <script>
+
+    const EXPERIMENT_NAME = "DEMO"
+    const SUBJECT_ID = jsPsych.randomization.randomID(12).toUpperCase()
 
     const fontColor = "red"
 
     // Gliederung in Trials
     const enter_fullscreen = {
         type: 'fullscreen',
-        fullscreen_mode: true
+        fullscreen_mode: true,
+        data: {isRelevant: false}
     }
+
+    // instructions
 
     const helloWorldTrial = {
         type: "html-keyboard-response", // hier nicht verschreiben!
         // Parameter? => Dokumentation
         stimulus: `<div style='color: ${fontColor};'>Hello, world!</div>`,
-        choices: ["space"], // nur damit kommt man weiter
+        choices: ["space", "x"], // nur damit kommt man weiter
+        data: {isRelevant: true},
     }
 
+    const btns = ["this", "that"]
     const buttonReponse = {
         type: "html-button-response",
         stimulus: "Press a button",
-        choices: ["this", "that"]
+        choices: btns,
+        data: {isRelevant: true},
+        on_finish: (data) => {
+            data.response = btns[data.button_pressed]
+        }
     }
 
+    function saveData(name, data){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', "save_data.php"); // PHP_SCRIPT_FILE
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({filename: name, filedata: data}));
+        console.log("saved data to: data/" + name);
+        return true;
+    }
+
+    // tiny helper function
+    // single digits are formatted with one preceding zero
+    function AddZero(num) {
+        return (num >= 0 && num < 10) ? "0" + num : num + "";
+    }
+
+
+    // DD MM YYYY Format (!)
+    function getDate(separator="-") {
+        let now = new Date()
+        return [
+            now.getFullYear(),
+            AddZero(now.getMonth() + 1),
+            AddZero(now.getDate()),
+        ].join(separator)
+    }
+
+    function getTime(separator=":") {
+        let now = new Date()
+        return [
+            AddZero(now.getHours()), 
+            AddZero(now.getMinutes()),
+            AddZero(now.getSeconds()),
+        ].join(separator)
+    }
+
+    function processData(data) {
+
+        const formattedData = []
+        const date = getDate("/")
+
+        for (let trialData of data) {
+            formattedData.push({
+                subcode: SUBJECT_ID,
+                reaktionsZeit: trialData.rt,
+                trialIndex: trialData.trial_index,
+                antwort: trialData.response ? trialData.response : trialData.key_press,
+            })
+        }
+
+        return formattedData
+    }
+
+
+
+    
     jsPsych.init({
         timeline: [enter_fullscreen, helloWorldTrial, buttonReponse],
         on_finish: () => {
-            jsPsych.data.displayData()
+            // saving time
+            const date = getDate("") // suppress default "-" separator
+            const time = getTime("")
+
+            // Only save filtered version! (processData-fn)
+            let fileNameFilteredData = `${EXPERIMENT_NAME}_${date}_${time}_${SUBJECT_ID}`;    // contains only relevant (answer) trials
+
+            const filteredData = jsPsych.data.get().filter({isRelevant: true}).values()
+
+            saveData(fileNameFilteredData, JSON2CSV(processData(filteredData)));
         }
     })
 

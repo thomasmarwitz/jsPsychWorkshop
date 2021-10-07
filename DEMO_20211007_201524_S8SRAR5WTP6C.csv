@@ -1,0 +1,3 @@
+"rt","stimulus","key_press","isRelevant","trial_type","trial_index","time_elapsed","internal_node_id","button_pressed","response"
+"1062","<div style='color: red;'>Hello, world!</div>","32","true","html-keyboard-response","1","4508","0.0-1.0","",""
+"1165","Press a button","","true","html-button-response","2","5675","0.0-2.0","0","this"
