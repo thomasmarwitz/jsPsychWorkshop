@@ -11,6 +11,8 @@
     <link href="jspsych-6.2.0/css/jspsych.css" rel="stylesheet" type="text/css">
     <!--Importiere geeignete Plugins-->
     <script src="jspsych-6.2.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.2.0/plugins/jspsych-fullscreen.js"></script>
+    <script src="jspsych-6.2.0/plugins/jspsych-html-button-response.js"></script>
 </head>
 <body></body>
 <script>
@@ -18,6 +20,11 @@
     const fontColor = "red"
 
     // Gliederung in Trials
+    const enter_fullscreen = {
+        type: 'fullscreen',
+        fullscreen_mode: true
+    }
+
     const helloWorldTrial = {
         type: "html-keyboard-response", // hier nicht verschreiben!
         // Parameter? => Dokumentation
@@ -25,8 +32,17 @@
         choices: ["space"], // nur damit kommt man weiter
     }
 
+    const buttonReponse = {
+        type: "html-button-response",
+        stimulus: "Press a button",
+        choices: ["this", "that"]
+    }
+
     jsPsych.init({
-        timeline: [helloWorldTrial]
+        timeline: [enter_fullscreen, helloWorldTrial, buttonReponse],
+        on_finish: () => {
+            jsPsych.data.displayData()
+        }
     })
 
 
