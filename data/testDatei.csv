@@ -1,0 +1,4 @@
+"success","trial_type","trial_index","time_elapsed","internal_node_id","rt","stimulus","key_press","button_pressed","response"
+"true","fullscreen","0","3147","0.0-0.0","","","","",""
+"","html-keyboard-response","1","4059","0.0-1.0","910","<div style='color: red;'>Hello, world!</div>","32","",""
+"","html-button-response","2","5055","0.0-2.0","995","Press a button","","1","that"
